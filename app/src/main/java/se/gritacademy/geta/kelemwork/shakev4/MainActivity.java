@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -27,6 +29,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     TextView tv;
     TextView tv2;
     TextView tv3;
+    ImageView imageView;
+    ImageButton imageButton;
     @Override
     protected void onPause() {
         super.onPause();
@@ -61,23 +65,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
          x = sensorEvent.values[0];
          y = sensorEvent.values[1];
          z = sensorEvent.values[2];
-
-        if (sensorEvent.sensor.getType()==Sensor.TYPE_GYROSCOPE) {
-            if (x >0) {
-                Log.d("alrik", x + "Xrotation");
-                tv.setText("basingka"+x);
-            }
-            if (y >0) {
-                Log.d("alrik", y + "Yrotation");
-                tv2.setText("basingka"+y);
-            }  if (z >0) {
-                Log.d("alrik", z + "Zrotation");
-                tv3.setText("basingka"+z);
-            }
-        }
-         tv = findViewById(R.id.SensorView);
-         tv2 = findViewById(R.id.SensorView2);
-         tv3 = findViewById(R.id.SensorView3);
+        tv = findViewById(R.id.SensorView);
+        tv2 = findViewById(R.id.SensorView2);
+        tv3 = findViewById(R.id.SensorView3);
+        imageView = (ImageView) findViewById(R.id.rotationarrow);
         Button b = findViewById(R.id.button);
         b.setText("X-value");
         b.setOnClickListener(new View.OnClickListener() {
@@ -102,6 +93,24 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 tv3.setText("basingka"+z);
             }
         });
+        if (sensorEvent.sensor.getType()==Sensor.TYPE_GYROSCOPE) {
+            if (x >0) {
+                Log.d("alrik", x + "Xrotation");
+                tv.setText("basingka"+x);
+                imageView.animate().rotation(imageView.getRotation()+x*100).start();
+
+            }
+            if (y >0) {
+                Log.d("alrik", y + "Yrotation");
+                tv2.setText("basingka"+y);
+                imageView.animate().rotation(imageView.getRotation()+y*100).start();
+            }  if (z >0) {
+                Log.d("alrik", z + "Zrotation");
+                tv3.setText("basingka"+z);
+                imageView.animate().rotation(imageView.getRotation()-z).start();
+            }
+        }
+
 
 
     }
@@ -118,6 +127,13 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         setContentView(R.layout.activity_main);
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
             sensor = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
+        imageButton = (android.widget.ImageButton) findViewById(R.id.imageButton3);
+        imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                imageButton.animate().rotation(imageButton.getRotation()-360).start();
+            }
+        });
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
