@@ -1,6 +1,7 @@
 package se.gritacademy.geta.kelemwork.shakev4;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -31,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     TextView tv3;
     ImageView imageView;
     ImageButton imageButton;
+    View iv;
     @Override
     protected void onPause() {
         super.onPause();
@@ -46,6 +48,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     @Override
     protected void onStart() {
         super.onStart();
+        sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL);
     }
 
     @Override
@@ -65,48 +68,24 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
          x = sensorEvent.values[0];
          y = sensorEvent.values[1];
          z = sensorEvent.values[2];
-        tv = findViewById(R.id.SensorView);
-        tv2 = findViewById(R.id.SensorView2);
-        tv3 = findViewById(R.id.SensorView3);
+
         imageView = (ImageView) findViewById(R.id.rotationarrow);
-        Button b = findViewById(R.id.button);
-        b.setText("X-value");
-        b.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                tv.setText("basingka"+x);
-            }
-        });
-        Button b2 = findViewById(R.id.button2);
-        b2.setText("Y-value");
-        b2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                tv2.setText("basingka"+y);
-            }
-        });
-        Button b3 = findViewById(R.id.button3);
-        b3.setText("Z-value");
-        b3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                tv3.setText("basingka"+z);
-            }
-        });
+
         if (sensorEvent.sensor.getType()==Sensor.TYPE_GYROSCOPE) {
             if (x >0) {
                 Log.d("alrik", x + "Xrotation");
-                tv.setText("basingka"+x);
-                imageView.animate().rotation(imageView.getRotation()+x*100).start();
+                tv.setText("Gyroscope-X axis: "+x);
+               // imageView.getRotation()
+                imageView.animate().rotation(imageView.getRotation()+z*100).start();
 
             }
             if (y >0) {
                 Log.d("alrik", y + "Yrotation");
-                tv2.setText("basingka"+y);
+                tv2.setText("Gyroscope-Y axis: "+y);
                 imageView.animate().rotation(imageView.getRotation()+y*100).start();
             }  if (z >0) {
                 Log.d("alrik", z + "Zrotation");
-                tv3.setText("basingka"+z);
+                tv3.setText("Gyroscope-Z axis: "+z);
                 imageView.animate().rotation(imageView.getRotation()-z).start();
             }
         }
@@ -128,13 +107,47 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
             sensor = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
         imageButton = (android.widget.ImageButton) findViewById(R.id.imageButton3);
+        tv = findViewById(R.id.SensorView);
+        tv.setText("Gyroscope-X axis: ");
+        tv.setBackgroundColor(Color.WHITE);
+        tv2 = findViewById(R.id.SensorView2);
+        tv2.setText("Gyroscope-Y axis: ");
+        tv2.setBackgroundColor(Color.WHITE);
+        tv3 = findViewById(R.id.SensorView3);
+        tv3.setText("Gyroscope-Z axis: ");
+        tv3.setBackgroundColor(Color.WHITE);
+        iv = findViewById(R.id.main);
+
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 imageButton.animate().rotation(imageButton.getRotation()-360).start();
             }
         });
-
+        Button b = findViewById(R.id.button);
+        b.setText("Green");
+        b.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                iv.setBackgroundColor(Color.rgb(0,150,0));
+            }
+        });
+        Button b2 = findViewById(R.id.button2);
+        b2.setText("Red");
+        b2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                iv.setBackgroundColor(Color.rgb(150,0,0));
+            }
+        });
+        Button b3 = findViewById(R.id.button3);
+        b3.setText("Reset");
+        b3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                iv.setBackgroundColor(Color.WHITE);
+            }
+        });
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
