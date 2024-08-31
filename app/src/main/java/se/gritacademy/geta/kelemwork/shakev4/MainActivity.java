@@ -76,17 +76,20 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 Log.d("alrik", x + "Xrotation");
                 tv.setText("Gyroscope-X axis: "+x);
                // imageView.getRotation()
-                imageView.animate().rotation(imageView.getRotation()+z*100).start();
+                imageView.getRotation();
+                imageView.setRotationX(x*100);
 
             }
             if (y >0) {
                 Log.d("alrik", y + "Yrotation");
                 tv2.setText("Gyroscope-Y axis: "+y);
-                imageView.animate().rotation(imageView.getRotation()+y*100).start();
+                imageView.getRotation();
+                imageView.setRotationY(y*100);
             }  if (z >0) {
                 Log.d("alrik", z + "Zrotation");
                 tv3.setText("Gyroscope-Z axis: "+z);
-                imageView.animate().rotation(imageView.getRotation()-z).start();
+                imageView.getRotation();
+                imageView.setRotation(z*100);
             }
         }
 
